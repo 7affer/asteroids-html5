@@ -10,7 +10,7 @@ function play_multi_sound(s) {
 		thistime = new Date();
 		if (audiochannels[a]['finished'] < thistime.getTime()) {			// is this channel finished?
 			audiochannels[a]['finished'] = thistime.getTime() + document.getElementById(s).duration * 1000;
-			audiochannels[a]['channel'].src = document.getElementById(s).src;
+			audiochannels[a]['channel'].src = document.getElementById(s).firstChild.src;
 			audiochannels[a]['channel'].load();
 			audiochannels[a]['channel'].play();
 			break;
