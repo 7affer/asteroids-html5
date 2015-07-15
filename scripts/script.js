@@ -46,8 +46,8 @@ function init() {
 			new Asteroid(
 				Math.random() * WIDTH,
 				Math.random() * HEIGHT,
-				Math.random() * 2 - 1,
-				Math.random() * 2 - 1
+				Math.random() * 0.5 - Math.random(),
+				Math.random() * 0.5 - Math.random()
 			)
 		);
 	}
@@ -78,8 +78,8 @@ var Level = {
 				new Asteroid(
 					Math.random() * WIDTH,
 					Math.random() * HEIGHT,
-					Math.random() * 1.5 - 1,
-					Math.random() * 1.5 - 1
+					Math.random() * 0.5 - Math.random(),
+					Math.random() * 0.5 - Math.random()
 				)
 			);
 		}
@@ -124,7 +124,7 @@ var Ship = {
 	},
 
 	fire: function () {
-		if (lastTime - this.lastShot > 300) {
+		if (lastTime - this.lastShot > 200) {
 			Level.bullets.push(
 				new Bullet(
 					this.x,
