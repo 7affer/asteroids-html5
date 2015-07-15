@@ -1,0 +1,29 @@
+body {
+	background: #000;
+}
+
+table {
+	width: 100%;
+}
+
+#canvas-container {
+	position: relative;
+	width: 800px;
+	height: 600px;
+}
+
+#canvas-container canvas {
+	position: absolute;
+}
+
+@font-face {
+	font-family: 'Audiowide';
+	font-style: normal;
+	font-weight: normal;
+	src: url(Audiowide-Regular.ttf);
+}
+
+#canvas {
+	border: 1px solid #fff;
+	background: #000;
+}
