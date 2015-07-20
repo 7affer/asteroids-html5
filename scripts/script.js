@@ -20,20 +20,20 @@ function init() {
 
 	window.requestAnimFrame = (function (callback) {
 		return window.requestAnimationFrame ||
-        window.webkitRequestAnimationFrame ||
-        window.mozRequestAnimationFrame ||
-        window.oRequestAnimationFrame ||
-        window.msRequestAnimationFrame ||
-        function (callback) {
-        	window.setTimeout(callback, 1000 / 60);
-        };
+			window.webkitRequestAnimationFrame ||
+			window.mozRequestAnimationFrame ||
+			window.oRequestAnimationFrame ||
+			window.msRequestAnimationFrame ||
+			function (callback) {
+				window.setTimeout(callback, 1000 / 60);
+			};
 	})();
 
 	canvas = document.getElementById("canvas");
 	canvas.width = WIDTH;
 	canvas.height = HEIGHT;
 	ctx = canvas.getContext("2d");
-	
+
 	canvas.onmouseup = canvasUp;
 	canvas.onmousemove = canvasMove;
 	canvas.onmousedown = canvasClick;
@@ -48,8 +48,8 @@ function init() {
 				Math.random() * HEIGHT,
 				Math.random() * 0.5 - Math.random(),
 				Math.random() * 0.5 - Math.random()
-			)
-		);
+				)
+			);
 	}
 }
 
@@ -63,32 +63,32 @@ var Level = {
 	asteroids: [],
 	draw: function () {
 		ctx.clearRect(0, 0, WIDTH, HEIGHT);
-		
+
 		this.applyInputs();
 
 		for (var i = 0; i < this.asteroids.length; i++) {
 			this.asteroids[i].move();
 			this.asteroids[i].draw();
 		}
-		
+
 		this.asteroids = _.filter(this.asteroids, function (el) { return el.active; });
-		
-		for(var i = 0; i < OBJECTS - this.asteroids.length; i++){
+
+		for (var i = 0; i < OBJECTS - this.asteroids.length; i++) {
 			this.asteroids.push(
 				new Asteroid(
 					Math.random() * WIDTH,
 					Math.random() * HEIGHT,
 					Math.random() * 0.5 - Math.random(),
 					Math.random() * 0.5 - Math.random()
-				)
-			);
+					)
+				);
 		}
 
 		for (var i = 0; i < this.bullets.length; i++) {
 			this.bullets[i].move();
 			this.bullets[i].draw();
 		}
-		
+
 		this.bullets = _.filter(this.bullets, function (el) { return el.active; });
 
 		Ship.move();
@@ -132,8 +132,8 @@ var Ship = {
 					this.turn().x,
 					this.turn().y,
 					Ship.alpha
-				)
-			);
+					)
+				);
 			Sounds.popp();
 			this.lastShot = lastTime;
 		}
@@ -149,8 +149,8 @@ var Ship = {
 		x1 = Mouse.x - this.x;
 		y1 = Mouse.y - this.y;
 		return {
-			x : x1 / (Math.abs(x1) + Math.abs(y1)),
-			y : y1 / (Math.abs(x1) + Math.abs(y1))
+			x: x1 / (Math.abs(x1) + Math.abs(y1)),
+			y: y1 / (Math.abs(x1) + Math.abs(y1))
 		};
 	},
 
@@ -184,14 +184,14 @@ var Asteroid = function (x, y, dx, dy) {
 	this.points = [];
 	this.size = Math.random() * 30 + 10;
 	this.size2 = this.size * 0.7;
-	this.points.push([Math.random() * 5 + this.size2 , Math.random() * 5 + this.size2 ]);
+	this.points.push([Math.random() * 5 + this.size2, Math.random() * 5 + this.size2]);
 	this.points.push([Math.random() * 5 + this.size, Math.random() * 5]);
-	this.points.push([Math.random() * 5 + this.size2 , Math.random() * 5 - this.size2 ]);
+	this.points.push([Math.random() * 5 + this.size2, Math.random() * 5 - this.size2]);
 	this.points.push([Math.random() * 5, Math.random() * 5 - this.size]);
-	this.points.push([Math.random() * 5 - this.size2 , Math.random() * 5 - this.size2 ]);
-	this.points.push([Math.random() * 5 - this.size, Math.random() * 5     ]);
-	this.points.push([Math.random() * 5 - this.size2 , Math.random() * 5 + this.size2 ]);
-	this.points.push([Math.random() * 5, Math.random() * 5 + this.size]);	
+	this.points.push([Math.random() * 5 - this.size2, Math.random() * 5 - this.size2]);
+	this.points.push([Math.random() * 5 - this.size, Math.random() * 5]);
+	this.points.push([Math.random() * 5 - this.size2, Math.random() * 5 + this.size2]);
+	this.points.push([Math.random() * 5, Math.random() * 5 + this.size]);
 
 	this.move = function () {
 		this.x += this.dx;
@@ -199,7 +199,7 @@ var Asteroid = function (x, y, dx, dy) {
 		if (
 			(this.x > WIDTH + OUTER || this.x < -OUTER) ||
 			(this.y > HEIGHT + OUTER || this.y < -OUTER)
-		) {
+			) {
 			this.active = false;
 		}
 	},
@@ -209,13 +209,13 @@ var Asteroid = function (x, y, dx, dy) {
 		ctx.beginPath();
 		ctx.translate(this.x, this.y);
 		ctx.rotate(-this.alpha);
-		
+
 		ctx.moveTo(this.points[0][0], this.points[0][1]);
-		for(var i = 1; i < this.points.length; i++) {
-			ctx.lineTo(this.points[i][0], this.points[i][1]);	
+		for (var i = 1; i < this.points.length; i++) {
+			ctx.lineTo(this.points[i][0], this.points[i][1]);
 		}
 		ctx.lineTo(this.points[0][0], this.points[0][1]);
-		
+
 		ctx.strokeStyle = '#FFF';
 		ctx.fillStyle = '#000';
 		ctx.closePath();
@@ -233,20 +233,20 @@ var Bullet = function (x, y, dx, dy, a) {
 	this.active = true;
 	this.alpha = a;
 	this.friction = 2;
-	
+
 	this.move = function () {
 		this.x += this.dx * this.friction;
 		this.y += this.dy * this.friction;
 		if (this.x > WIDTH || this.x < 0 || this.y > HEIGHT || this.y < 0) {
 			this.active = false;
 		}
-		
-		for(var i = 0; i < Level.asteroids.length; i++) {
+
+		for (var i = 0; i < Level.asteroids.length; i++) {
 			var rad = Math.sqrt(Math.pow(Level.asteroids[i].x - this.x, 2) + Math.pow(Level.asteroids[i].y - this.y, 2));
-			if(rad < Level.asteroids[i].size2) {
+			if (rad < Level.asteroids[i].size2) {
 				Level.asteroids[i].active = false;
 				Sounds.explosion();
-			} 
+			}
 		}
 	},
 
@@ -269,7 +269,7 @@ function draw() {
 	var time = date.getTime();
 	timeDiff = time - lastTime;
 	fps = 1000 / timeDiff;
-	
+
 	if (fps <= 50) {
 		lastTime = time;
 		Level.draw();
