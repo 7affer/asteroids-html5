@@ -1,9 +1,10 @@
-var canvas;
-var ctx;
-var WIDTH = 1028;
-var HEIGHT = 768;
-var OUTER = 50;
-var OBJECTS = 5;
+var canvas,
+	ctx,
+	WIDTH = 1028,
+	HEIGHT = 768,
+	OUTER = 50,
+	OBJECTS = 3,
+	DEFAULTASTEROIDSIZE = 40;
 
 var buttonClick = false;
 var currentKey = '';
@@ -42,14 +43,7 @@ function init() {
 	draw();
 
 	for (var i = 0; i < OBJECTS; i++) {
-		Level.asteroids.push(
-			new Asteroid(
-				Math.random() * WIDTH,
-				Math.random() * HEIGHT,
-				Math.random() * 0.5 - Math.random(),
-				Math.random() * 0.5 - Math.random()
-				)
-			);
+		Level.asteroids.push(AsteroidFactory.Create());
 	}
 }
 
@@ -74,14 +68,7 @@ var Level = {
 		this.asteroids = _.filter(this.asteroids, function (el) { return el.active; });
 
 		for (var i = 0; i < OBJECTS - this.asteroids.length; i++) {
-			this.asteroids.push(
-				new Asteroid(
-					Math.random() * WIDTH,
-					Math.random() * HEIGHT,
-					Math.random() * 0.5 - Math.random(),
-					Math.random() * 0.5 - Math.random()
-					)
-				);
+			this.asteroids.push(AsteroidFactory.Create());
 		}
 
 		for (var i = 0; i < this.bullets.length; i++) {
@@ -121,19 +108,16 @@ var Ship = {
 		this.y += this.dy;
 		this.dx *= this.friction;
 		this.dy *= this.friction;
+		
+		if(this.x < 0) this.x = WIDTH;
+		if(this.x > WIDTH) this.x = 0;
+		if(this.y < 0) this.y = HEIGHT;
+		if(this.y > HEIGHT) this.y = 0;
 	},
 
 	fire: function () {
 		if (lastTime - this.lastShot > 200) {
-			Level.bullets.push(
-				new Bullet(
-					this.x,
-					this.y,
-					this.turn().x,
-					this.turn().y,
-					Ship.alpha
-					)
-				);
+			Level.bullets.push(new Bullet(this.x, this.y, this.turn().x, this.turn().y, Ship.alpha));
 			Sounds.popp();
 			this.lastShot = lastTime;
 		}
@@ -174,15 +158,15 @@ var Ship = {
 	}
 }
 
-var Asteroid = function (x, y, dx, dy) {
+var Asteroid = function (x, y, dx, dy, size) {
 	this.x = x;
 	this.y = y;
-	this.dx = dx * 10;
-	this.dy = dy * 10;
+	this.dx = dx;
+	this.dy = dy;
 	this.active = true;
 	this.alpha = 0;
 	this.points = [];
-	this.size = Math.random() * 30 + 10;
+	this.size = Math.random() * size + size;
 	this.size2 = this.size * 0.7;
 	this.points.push([Math.random() * 5 + this.size2, Math.random() * 5 + this.size2]);
 	this.points.push([Math.random() * 5 + this.size, Math.random() * 5]);
@@ -242,10 +226,26 @@ var Bullet = function (x, y, dx, dy, a) {
 		}
 
 		for (var i = 0; i < Level.asteroids.length; i++) {
-			var rad = Math.sqrt(Math.pow(Level.asteroids[i].x - this.x, 2) + Math.pow(Level.asteroids[i].y - this.y, 2));
-			if (rad < Level.asteroids[i].size2) {
-				Level.asteroids[i].active = false;
+			var asteroid = Level.asteroids[i];
+			var rad = Math.sqrt(Math.pow(asteroid.x - this.x, 2) + Math.pow(asteroid.y - this.y, 2));
+			if (rad < asteroid.size2) {
+
+				this.active = false;
+				asteroid.active = false;
+				if (asteroid.size > 30) {
+					for (j = 0; j < 2; j++) {
+						Level.asteroids.push(new Asteroid(
+							asteroid.x,
+							asteroid.y,
+							asteroid.dx * Math.pow(-1, j),
+							asteroid.dy * Math.pow(-1, j + 1),
+							asteroid.size / 2
+							)
+							);
+					}
+				}
 				Sounds.explosion();
+				break;
 			}
 		}
 	},
@@ -304,4 +304,32 @@ function keyUp(event) {
 function keyDown(event) {
 	x = event.keyCode;
 	currentKey = String.fromCharCode(x);
+}
+
+var AsteroidFactory = {
+	Create: function () {
+		random = Math.random()
+		if(random < 0.25) {
+			width = 0 - OUTER /2;
+			height = Math.random() * HEIGHT; 
+		}
+		else if(random < 0.5) {
+			width = WIDTH + OUTER /2;
+			height = Math.random() * HEIGHT;
+		} else if(random < 0.75) {
+			height = HEIGHT + OUTER /2;
+			width = Math.random() * WIDTH;
+		} else if(random < 1) {
+			height = 0 - OUTER /2;
+			width = Math.random() * WIDTH;
+		}
+		
+		return new Asteroid(
+			width,
+			height,
+			(Math.random() * 0.5 - Math.random()) * 11,
+			(Math.random() * 0.5 - Math.random()) * 11,
+			DEFAULTASTEROIDSIZE
+			);
+	}
 }
