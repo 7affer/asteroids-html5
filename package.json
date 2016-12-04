@@ -1,0 +1,22 @@
+{
+    "name": "asteroids-html5",
+    "version": "1.0.0",
+    "description": "Simple asteroids game build with html5 canvas",
+    "main": "index.html",
+    "scripts": {
+        "start": "serve ."
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/7affer/asteroids-html5.git"
+    },
+    "author": "Bartłomiej Wilk",
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/7affer/asteroids-html5/issues"
+    },
+    "homepage": "https://github.com/7affer/asteroids-html5#readme",
+    "devDependencies": {
+        "serve": "^1.4.0"
+    }
+}
