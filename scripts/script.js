@@ -142,13 +142,14 @@ var Ship = {
 		this.alpha = Math.atan2(Mouse.x - this.x, Mouse.y - this.y);
 		ctx.save();
 		ctx.beginPath();
-		ctx.translate(this.x, this.y);
+		ctx.translate(Math.floor(this.x), Math.floor(this.y));
 		ctx.rotate(-this.alpha);
 		ctx.moveTo(10, -15);
 		ctx.lineTo(0, 15);
 		ctx.lineTo(-10, -15);
 		ctx.lineTo(0, -10);
 		ctx.lineTo(10, -15);
+		ctx.lineWidth = 2;
 		ctx.strokeStyle = '#FFF';
 		ctx.fillStyle = '#000';
 		ctx.closePath();
@@ -168,14 +169,14 @@ var Asteroid = function (x, y, dx, dy, size) {
 	this.points = [];
 	this.size = Math.random() * size + size;
 	this.size2 = this.size * 0.7;
-	this.points.push([Math.random() * 5 + this.size2, Math.random() * 5 + this.size2]);
-	this.points.push([Math.random() * 5 + this.size, Math.random() * 5]);
-	this.points.push([Math.random() * 5 + this.size2, Math.random() * 5 - this.size2]);
-	this.points.push([Math.random() * 5, Math.random() * 5 - this.size]);
-	this.points.push([Math.random() * 5 - this.size2, Math.random() * 5 - this.size2]);
-	this.points.push([Math.random() * 5 - this.size, Math.random() * 5]);
-	this.points.push([Math.random() * 5 - this.size2, Math.random() * 5 + this.size2]);
-	this.points.push([Math.random() * 5, Math.random() * 5 + this.size]);
+	this.points.push([Math.floor(Math.random() * 5 + this.size2), Math.floor(Math.random() * 5 + this.size2)]);
+	this.points.push([Math.floor(Math.random() * 5 + this.size), Math.floor(Math.random() * 5)]);
+	this.points.push([Math.floor(Math.random() * 5 + this.size2), Math.floor(Math.random() * 5 - this.size2)]);
+	this.points.push([Math.floor(Math.random() * 5), Math.floor(Math.random() * 5 - this.size)]);
+	this.points.push([Math.floor(Math.random() * 5 - this.size2), Math.floor(Math.random() * 5 - this.size2)]);
+	this.points.push([Math.floor(Math.random() * 5 - this.size), Math.floor(Math.random() * 5)]);
+	this.points.push([Math.floor(Math.random() * 5 - this.size2), Math.floor(Math.random() * 5 + this.size2)]);
+	this.points.push([Math.floor(Math.random() * 5), Math.floor(Math.random() * 5 + this.size)]);
 
 	this.move = function () {
 		this.x += this.dx;
@@ -191,7 +192,7 @@ var Asteroid = function (x, y, dx, dy, size) {
 	this.draw = function () {
 		ctx.save();
 		ctx.beginPath();
-		ctx.translate(this.x, this.y);
+		ctx.translate(Math.floor(this.x), Math.floor(this.y));
 		ctx.rotate(-this.alpha);
 
 		ctx.moveTo(this.points[0][0], this.points[0][1]);
@@ -202,6 +203,7 @@ var Asteroid = function (x, y, dx, dy, size) {
 
 		ctx.strokeStyle = '#FFF';
 		ctx.fillStyle = '#000';
+		ctx.lineWidth = 2;
 		ctx.closePath();
 		ctx.stroke();
 		ctx.fill();
@@ -252,9 +254,10 @@ var Bullet = function (x, y, dx, dy, a) {
 
 	this.draw = function () {
 		ctx.save();
-		ctx.translate(this.x, this.y);
+		ctx.translate(Math.floor(this.x), Math.floor(this.y));
 		ctx.rotate(-this.alpha);
 		ctx.strokeStyle = "#FFF";
+		ctx.lineWidth = 2;
 		ctx.beginPath();
 		ctx.moveTo(0, 0);
 		ctx.lineTo(0, 5);
